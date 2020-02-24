@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/Countries_WGS84_0.js"></script>
+        <script src="data/reportingStations_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-267.4323832503337,-283.42618638948625],[216.98087383529116,398.58538429586827]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop_Countries_WGS84_0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CNTRY_NAME'] !== null ? Autolinker.link(feature.properties['CNTRY_NAME'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Countries_WGS84_0_0() {
+            return {
+                pane: 'pane_Countries_WGS84_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(133,182,111,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Countries_WGS84_0');
+        map.getPane('pane_Countries_WGS84_0').style.zIndex = 400;
+        map.getPane('pane_Countries_WGS84_0').style['mix-blend-mode'] = 'normal';
+        var layer_Countries_WGS84_0 = new L.geoJson(json_Countries_WGS84_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Countries_WGS84_0',
+            layerName: 'layer_Countries_WGS84_0',
+            pane: 'pane_Countries_WGS84_0',
+            onEachFeature: pop_Countries_WGS84_0,
+            style: style_Countries_WGS84_0_0,
+        });
+        bounds_group.addLayer(layer_Countries_WGS84_0);
+        map.addLayer(layer_Countries_WGS84_0);
+        function pop_reportingStations_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Station</strong><br />' + (feature.properties['Station'] !== null ? Autolinker.link(feature.properties['Station'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Country</th>\
+                        <td>' + (feature.properties['Country'] !== null ? Autolinker.link(feature.properties['Country'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Latitude'] !== null ? Autolinker.link(feature.properties['Latitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Longitude</strong><br />' + (feature.properties['Longitude'] !== null ? Autolinker.link(feature.properties['Longitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Num Years</strong><br />' + (feature.properties['Num Years'] !== null ? Autolinker.link(feature.properties['Num Years'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_reportingStations_1_0(feature) {
+            switch(String(feature.properties['Num Years'])) {
+                case '1':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 2.8000000000000003,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,251,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '2':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 3.2,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,240,250,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '3':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 3.5999999999999996,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,229,244,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '4':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 3.9999999999999987,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(194,218,238,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '5':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 4.399999999999999,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,206,228,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '6':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 4.799999999999997,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(133,188,220,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '8':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 5.1999999999999975,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(99,169,211,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '9':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 5.599999999999998,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(70,149,200,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '10':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,126,188,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '11':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 6.399999999999997,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(25,103,173,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '12':
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 6.799999999999995,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,78,152,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_reportingStations_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,48,107,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_reportingStations_1');
+        map.getPane('pane_reportingStations_1').style.zIndex = 401;
+        map.getPane('pane_reportingStations_1').style['mix-blend-mode'] = 'normal';
+        var layer_reportingStations_1 = new L.geoJson(json_reportingStations_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_reportingStations_1',
+            layerName: 'layer_reportingStations_1',
+            pane: 'pane_reportingStations_1',
+            onEachFeature: pop_reportingStations_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_reportingStations_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_reportingStations_1);
+        map.addLayer(layer_reportingStations_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'reportingStations<br /><table><tr><td style="text-align: center;"><img src="legend/reportingStations_1_10.png" /></td><td>1</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_21.png" /></td><td>2</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_32.png" /></td><td>3</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_43.png" /></td><td>4</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_54.png" /></td><td>5</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_65.png" /></td><td>6</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_86.png" /></td><td>8</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_97.png" /></td><td>9</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_108.png" /></td><td>10</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_119.png" /></td><td>11</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_1210.png" /></td><td>12</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_11.png" /></td><td></td></tr></table>': layer_reportingStations_1,'<img src="legend/Countries_WGS84_0.png" /> Countries_WGS84': layer_Countries_WGS84_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
