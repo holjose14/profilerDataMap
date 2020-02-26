@@ -31,11 +31,12 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="data/Countries_WGS84_0.js"></script>
-        <script src="data/reportingStations_1.js"></script>
+        <script src="data/stationsNoData_1.js"></script>
+        <script src="data/reportingStations_2.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[-267.4323832503337,-283.42618638948625],[216.98087383529116,398.58538429586827]]);
+        }).fitBounds([[9.142593054358386,-104.82570389130045],[56.80969871943519,-17.945413074734816]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var bounds_group = new L.featureGroup([]);
@@ -65,7 +66,7 @@
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(133,182,111,1.0)',
-                interactive: true,
+                interactive: false,
             }
         }
         map.createPane('pane_Countries_WGS84_0');
@@ -73,7 +74,7 @@
         map.getPane('pane_Countries_WGS84_0').style['mix-blend-mode'] = 'normal';
         var layer_Countries_WGS84_0 = new L.geoJson(json_Countries_WGS84_0, {
             attribution: '',
-            interactive: true,
+            interactive: false,
             dataVar: 'json_Countries_WGS84_0',
             layerName: 'layer_Countries_WGS84_0',
             pane: 'pane_Countries_WGS84_0',
@@ -82,7 +83,64 @@
         });
         bounds_group.addLayer(layer_Countries_WGS84_0);
         map.addLayer(layer_Countries_WGS84_0);
-        function pop_reportingStations_1(feature, layer) {
+        function pop_stationsNoData_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>WMO-Sta ID</strong><br />' + (feature.properties['WMO-Sta ID'] !== null ? Autolinker.link(feature.properties['WMO-Sta ID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Country</th>\
+                        <td>' + (feature.properties['Country'] !== null ? Autolinker.link(feature.properties['Country'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['Latitude'] !== null ? Autolinker.link(feature.properties['Latitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['Longitude'] !== null ? Autolinker.link(feature.properties['Longitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_stationsNoData_1_0() {
+            return {
+                pane: 'pane_stationsNoData_1',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(217,9,37,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,241,243,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_stationsNoData_1');
+        map.getPane('pane_stationsNoData_1').style.zIndex = 401;
+        map.getPane('pane_stationsNoData_1').style['mix-blend-mode'] = 'normal';
+        var layer_stationsNoData_1 = new L.geoJson(json_stationsNoData_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_stationsNoData_1',
+            layerName: 'layer_stationsNoData_1',
+            pane: 'pane_stationsNoData_1',
+            onEachFeature: pop_stationsNoData_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_stationsNoData_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_stationsNoData_1);
+        map.addLayer(layer_stationsNoData_1);
+        function pop_reportingStations_2(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2"><strong>Station</strong><br />' + (feature.properties['Station'] !== null ? Autolinker.link(feature.properties['Station'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
@@ -92,10 +150,12 @@
                         <td>' + (feature.properties['Country'] !== null ? Autolinker.link(feature.properties['Country'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Latitude'] !== null ? Autolinker.link(feature.properties['Latitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                        <th scope="row">Latitude</th>\
+                        <td>' + (feature.properties['Latitude'] !== null ? Autolinker.link(feature.properties['Latitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>Longitude</strong><br />' + (feature.properties['Longitude'] !== null ? Autolinker.link(feature.properties['Longitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                        <th scope="row">Longitude</th>\
+                        <td>' + (feature.properties['Longitude'] !== null ? Autolinker.link(feature.properties['Longitude'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2"><strong>Num Years</strong><br />' + (feature.properties['Num Years'] !== null ? Autolinker.link(feature.properties['Num Years'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
@@ -104,12 +164,12 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_reportingStations_1_0(feature) {
+        function style_reportingStations_2_0(feature) {
             switch(String(feature.properties['Num Years'])) {
                 case '1':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 2.8000000000000003,
+                pane: 'pane_reportingStations_2',
+                radius: 2.8,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -124,7 +184,7 @@
                     break;
                 case '2':
                     return {
-                pane: 'pane_reportingStations_1',
+                pane: 'pane_reportingStations_2',
                 radius: 3.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -140,8 +200,8 @@
                     break;
                 case '3':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 3.5999999999999996,
+                pane: 'pane_reportingStations_2',
+                radius: 3.6,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -156,8 +216,8 @@
                     break;
                 case '4':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 3.9999999999999987,
+                pane: 'pane_reportingStations_2',
+                radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -172,8 +232,8 @@
                     break;
                 case '5':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 4.399999999999999,
+                pane: 'pane_reportingStations_2',
+                radius: 4.4,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -188,8 +248,8 @@
                     break;
                 case '6':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 4.799999999999997,
+                pane: 'pane_reportingStations_2',
+                radius: 4.8,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -204,8 +264,8 @@
                     break;
                 case '8':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 5.1999999999999975,
+                pane: 'pane_reportingStations_2',
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -220,8 +280,8 @@
                     break;
                 case '9':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 5.599999999999998,
+                pane: 'pane_reportingStations_2',
+                radius: 5.6,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -236,7 +296,7 @@
                     break;
                 case '10':
                     return {
-                pane: 'pane_reportingStations_1',
+                pane: 'pane_reportingStations_2',
                 radius: 6.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -252,8 +312,8 @@
                     break;
                 case '11':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 6.399999999999997,
+                pane: 'pane_reportingStations_2',
+                radius: 6.4,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -268,8 +328,8 @@
                     break;
                 case '12':
                     return {
-                pane: 'pane_reportingStations_1',
-                radius: 6.799999999999995,
+                pane: 'pane_reportingStations_2',
+                radius: 6.8,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -284,7 +344,7 @@
                     break;
                 default:
                     return {
-                pane: 'pane_reportingStations_1',
+                pane: 'pane_reportingStations_2',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -300,28 +360,28 @@
                     break;
             }
         }
-        map.createPane('pane_reportingStations_1');
-        map.getPane('pane_reportingStations_1').style.zIndex = 401;
-        map.getPane('pane_reportingStations_1').style['mix-blend-mode'] = 'normal';
-        var layer_reportingStations_1 = new L.geoJson(json_reportingStations_1, {
+        map.createPane('pane_reportingStations_2');
+        map.getPane('pane_reportingStations_2').style.zIndex = 402;
+        map.getPane('pane_reportingStations_2').style['mix-blend-mode'] = 'normal';
+        var layer_reportingStations_2 = new L.geoJson(json_reportingStations_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_reportingStations_1',
-            layerName: 'layer_reportingStations_1',
-            pane: 'pane_reportingStations_1',
-            onEachFeature: pop_reportingStations_1,
+            dataVar: 'json_reportingStations_2',
+            layerName: 'layer_reportingStations_2',
+            pane: 'pane_reportingStations_2',
+            onEachFeature: pop_reportingStations_2,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_reportingStations_1_0(feature));
+                return L.circleMarker(latlng, style_reportingStations_2_0(feature));
             },
         });
-        bounds_group.addLayer(layer_reportingStations_1);
-        map.addLayer(layer_reportingStations_1);
+        bounds_group.addLayer(layer_reportingStations_2);
+        map.addLayer(layer_reportingStations_2);
         var baseMaps = {};
-        L.control.layers(baseMaps,{'reportingStations<br /><table><tr><td style="text-align: center;"><img src="legend/reportingStations_1_10.png" /></td><td>1</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_21.png" /></td><td>2</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_32.png" /></td><td>3</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_43.png" /></td><td>4</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_54.png" /></td><td>5</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_65.png" /></td><td>6</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_86.png" /></td><td>8</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_97.png" /></td><td>9</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_108.png" /></td><td>10</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_119.png" /></td><td>11</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_1210.png" /></td><td>12</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_1_11.png" /></td><td></td></tr></table>': layer_reportingStations_1,'<img src="legend/Countries_WGS84_0.png" /> Countries_WGS84': layer_Countries_WGS84_0,},{collapsed:false}).addTo(map);
+        L.control.layers(baseMaps,{'reportingStations<br /><table><tr><td style="text-align: center;"><img src="legend/reportingStations_2_10.png" /></td><td>1</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_21.png" /></td><td>2</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_32.png" /></td><td>3</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_43.png" /></td><td>4</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_54.png" /></td><td>5</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_65.png" /></td><td>6</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_86.png" /></td><td>8</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_97.png" /></td><td>9</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_108.png" /></td><td>10</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_119.png" /></td><td>11</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_1210.png" /></td><td>12</td></tr><tr><td style="text-align: center;"><img src="legend/reportingStations_2_11.png" /></td><td></td></tr></table>': layer_reportingStations_2,'<img src="legend/stationsNoData_1.png" /> stationsNoData': layer_stationsNoData_1,'<img src="legend/Countries_WGS84_0.png" /> Countries_WGS84': layer_Countries_WGS84_0,},{collapsed:false}).addTo(map);
         setBounds();
         </script>
     </body>
